@@ -3,7 +3,7 @@
 //
 // To run:
 //
-// flutter run -t lib/example_caching.dart
+// flutter run -t lib/just_audio_caching.dart
 
 import 'package:audio_session/audio_session.dart';
 import 'package:just_audio_caching_firebase/common.dart';
@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
+import 'dart:developer';
 
 void main() => runApp(const MyApp());
 
@@ -25,8 +26,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final _player = AudioPlayer();
   final _audioSource = LockCachingAudioSource(Uri.parse(
     // Supports range requests:
-    "https://firebasestorage.googleapis.com/v0/b/felix-366510.appspot.com/o/music%2Fsongs%2FEpic%2F03.%20Ancestors.output.mp3?alt=media&token=f271d8fb-394e-4280-9411-636f5d7fddd1", // Doesn't support range requests:
-    //"https://filesamples.com/samples/audio/mp3/sample4.mp3",
+    "https://firebasestorage.googleapis.com/v0/b/felix-366510.appspot.com/o/demo%2F%ED%95%98%EC%A7%84(HAJIN)%20-%20UP.mp3?alt=media&token=92cc3c75-06dc-4356-a921-24726649a82d",    //"https://filesamples.com/samples/audio/mp3/sample4.mp3",
   ));
 
   @override
@@ -43,7 +43,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     final session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.speech());
     _player.playbackEventStream.listen((event) {}, onError: (Object e, StackTrace stackTrace) {
-      print('A stream error occurred: $e');
+      log('A stream error occurred: $e');
     });
     try {
       // Use resolve() if you want to obtain a UriAudioSource pointing directly
@@ -51,7 +51,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
       // await _player.setAudioSource(await _audioSource.resolve());
       await _player.setAudioSource(_audioSource);
     } catch (e) {
-      print("Error loading audio source: $e");
+      log("Error loading audio source: $e");
     }
   }
 
